@@ -1,46 +1,23 @@
 from fastapi import FastAPI
-from database import Base, engine
-from sqlalchemy.orm import Session
-from fastapi import Depends
-from database import SessionLocal
-from models import Contact
-from schemas import ContactCreate
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(
-    title="Bajwa Dispatch Solutions API",
-    version="1.0.0"
+from routes.contact import router as contact_router
+
+app = FastAPI(title="Bajwa Dispatch API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)
+app.include_router(contact_router)
+
 
 @app.get("/")
-def home():
+def root():
     return {
-        "message": "Welcome to Bajwa Dispatch Solutions API"
-    }
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@app.post("/contact")
-def create_contact(contact: ContactCreate, db: Session = Depends(get_db)):
-    new_contact = Contact(
-        name=contact.name,
-        email=contact.email,
-        phone=contact.phone,
-        company=contact.company,
-        message=contact.message,
-    )
-
-    db.add(new_contact)
-    db.commit()
-    db.refresh(new_contact)
-
-    return {
-        "success": True,
-        "message": "Contact saved successfully."
+        "message": "Bajwa Dispatch API Running"
     }

@@ -1,9 +1,9 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 
 class ContactCreate(BaseModel):
     name: str
-    email: EmailStr
+    email: str
     phone: str
-    company: str | None = None
+    company: str
     message: str
