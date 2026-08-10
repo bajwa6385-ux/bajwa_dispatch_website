@@ -30,3 +30,9 @@ def create_contact(
         "success": True,
         "message": "Contact saved successfully."
     }
+
+
+@router.get("/contacts")
+def get_contacts(db: Session = Depends(get_db)):
+    contacts = db.query(Contact).all()
+    return contacts

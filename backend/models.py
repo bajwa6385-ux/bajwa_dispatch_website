@@ -11,3 +11,4 @@ class Contact(Base):
     phone = Column(String(20), nullable=False)
     company = Column(String(150))
     message = Column(Text)
+    
