@@ -15,7 +15,7 @@ contactForm.addEventListener("submit", async function (e) {
     console.log("Sending:", data);
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/contact", {
+        const response = await fetch("https://bajwa-dispatch-website-1.onrender.com", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
