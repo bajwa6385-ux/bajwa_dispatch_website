@@ -1,7 +1,10 @@
 const contactForm = document.getElementById("contactForm");
+const result = document.getElementById("result");
 
 if (contactForm) {
+
     contactForm.addEventListener("submit", async function (e) {
+
         e.preventDefault();
 
         const data = {
@@ -14,41 +17,67 @@ if (contactForm) {
 
         console.log("Sending:", data);
 
+        if (result) {
+            result.innerText = "Sending...";
+        }
+
         try {
+
             const response = await fetch(
-                "https://bajwa-dispatch-website-1.onrender.com/contact",
+                "http://127.0.0.1:8000/contact",
                 {
                     method: "POST",
+
                     headers: {
                         "Content-Type": "application/json"
                     },
+
                     body: JSON.stringify(data)
                 }
             );
 
             console.log("Status:", response.status);
 
-            const result = await response.json();
+            const resultData = await response.json();
 
-            console.log("Result:", result);
+            console.log("Result:", resultData);
 
             if (response.ok) {
+
                 alert("✅ Message Sent Successfully!");
+
                 contactForm.reset();
+
+                if (result) {
+                    result.innerText =
+                        "✅ Contact saved successfully.";
+                }
+
             } else {
-                alert(
-                    "❌ Something went wrong: " +
-                    (result.detail || result.message || "Server error")
-                );
+
+                if (result) {
+                    result.innerText =
+                        "❌ " +
+                        (
+                            resultData.detail ||
+                            resultData.message ||
+                            "Server error"
+                        );
+                }
+
             }
 
         } catch (error) {
+
             console.error("Fetch Error:", error);
 
-            alert(
-                "⚠️ Cannot connect to FastAPI Server.\n\n" +
-                "Please try again."
-            );
+            if (result) {
+                result.innerText =
+                    "⚠️ Cannot connect to FastAPI Server.";
+            }
+
         }
+
     });
+
 }
